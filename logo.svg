@@ -9,12 +9,12 @@
       <stop offset="40%"  stop-color="#f59e0b"/>
       <stop offset="100%" stop-color="#22c55e"/>
     </linearGradient>
-    <filter id="glowRed" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
+    <filter id="glowRed" x="-40%" y="-30%" width="180%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="glowGreen" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
+    <filter id="glowGreen" x="-40%" y="-30%" width="180%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
@@ -23,29 +23,47 @@
   <rect width="200" height="200" rx="18" fill="url(#bg)"/>
   <rect x="0.5" y="0.5" width="199" height="199" rx="17.5" fill="none" stroke="#30363d" stroke-width="1"/>
 
-  <!-- Top accent -->
+  <!-- Top accent bar -->
   <rect x="60" y="0" width="80" height="2" rx="1" fill="url(#bar)" opacity="0.6"/>
 
-  <!-- </>  centered via text-anchor="middle" on a single text element -->
+  <!--
+    Courier New monospace at font-size=80: char width ≈ 48px
+    3 chars → total = 144px → left margin = (200-144)/2 = 28
+    char centers: < = 28+24 = 52 | / = 100 | > = 152+(-4) = 148
+    Each <text> uses text-anchor="middle" independently — no filter affects sibling positions
+  -->
+  <text x="52" y="116"
+        font-family="'Courier New', Courier, monospace"
+        font-size="80" font-weight="700"
+        text-anchor="middle"
+        fill="#ef4444"
+        filter="url(#glowRed)">&lt;</text>
+
   <text x="100" y="116"
         font-family="'Courier New', Courier, monospace"
         font-size="80" font-weight="700"
-        text-anchor="middle">
-    <tspan fill="#ef4444" filter="url(#glowRed)">&lt;</tspan><tspan fill="#c9d1d9">/</tspan><tspan fill="#22c55e" filter="url(#glowGreen)">&gt;</tspan>
-  </text>
+        text-anchor="middle"
+        fill="#c9d1d9">/</text>
+
+  <text x="148" y="116"
+        font-family="'Courier New', Courier, monospace"
+        font-size="80" font-weight="700"
+        text-anchor="middle"
+        fill="#22c55e"
+        filter="url(#glowGreen)">&gt;</text>
 
   <!-- Divider -->
   <line x1="24" y1="133" x2="176" y2="133" stroke="#21262d" stroke-width="1"/>
 
-  <!-- Bar track + fill -->
+  <!-- Bar -->
   <rect x="24" y="142" width="152" height="7" rx="3.5" fill="#1f2937"/>
   <rect x="24" y="142" width="152" height="7" rx="3.5" fill="url(#bar)"/>
 
   <!-- Labels -->
-  <text x="24"  y="161" font-family="'Courier New',monospace" font-size="8.5" fill="#6e7681">junior</text>
-  <text x="176" y="161" font-family="'Courier New',monospace" font-size="8.5" fill="#6e7681" text-anchor="end">senior</text>
+  <text x="24"  y="161" font-family="'Courier New', monospace" font-size="8.5" fill="#6e7681">junior</text>
+  <text x="176" y="161" font-family="'Courier New', monospace" font-size="8.5" fill="#6e7681" text-anchor="end">senior</text>
 
-  <!-- Name -->
+  <!-- Tool name -->
   <text x="100" y="182"
         font-family="'Courier New', Courier, monospace"
         font-size="9.5" fill="#3d444d"
