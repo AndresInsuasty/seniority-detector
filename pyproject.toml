@@ -1,0 +1,17 @@
+[project]
+name = "ia-junior-senior"
+version = "0.1.0"
+description = "Analiza código Python y determina si es junior o senior usando Claude"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.105.2",
+    "openai>=2.38.0",
+    "pylint>=4.0.5",
+    "python-dotenv>=1.2.2",
+    "requests>=2.34.2",
+    "rich>=15.0.0",
+    "typer>=0.26.4",
+]
+
+[project.scripts]
+detector = "detector:app"
