@@ -3,44 +3,21 @@
 import json
 import os
 import re
+from importlib.resources import files
 
-from ast_analyzer import CodeMetrics, metrics_to_summary
+from .ast_analyzer import CodeMetrics, metrics_to_summary
 
 
 MAX_CODE_CHARS: int = 4_000
 ENV_KEY_OPENAI = "OPENAI_API_KEY"
 ENV_KEY_ANTHROPIC = "ANTHROPIC_API_KEY"
 
-SYSTEM_PROMPT = """Eres un experto en calidad de código Python con 15 años de experiencia revisando código en empresas de tecnología de primer nivel.
 
-Tu tarea es analizar código Python y determinar el nivel del desarrollador basándote en señales concretas y medibles.
+def _load_system_prompt() -> str:
+    return files("seniority_detector.prompts").joinpath("system_prompt.txt").read_text(encoding="utf-8")
 
-**Niveles posibles:**
-- junior: código funcional pero con múltiples problemas de calidad
-- junior+: mejoras visibles pero aún faltan prácticas clave
-- senior-: código sólido con algunas áreas de mejora
-- senior: código de producción con todas las mejores prácticas
 
-**Señales junior (restan puntos):**
-- Variables genéricas: a, b, x, temp, data2
-- Sin manejo de errores o except genérico
-- Funciones largas que hacen múltiples cosas
-- Sin docstrings ni type hints
-- print() para debug en lugar de logging
-- Valores hardcodeados (contraseñas, URLs, magic numbers)
-- Loops donde caben list comprehensions
-
-**Señales senior (suman puntos):**
-- Nombres descriptivos y autoexplicativos
-- Type hints completos
-- Docstrings con descripción y parámetros
-- Context managers para recursos
-- Excepciones específicas con mensajes útiles
-- Configuración separada del código
-- Funciones pequeñas con una responsabilidad
-- Logging estructurado
-
-Responde ÚNICAMENTE con un JSON válido, sin texto adicional, sin bloques de código markdown."""
+SYSTEM_PROMPT: str = _load_system_prompt()
 
 USER_TEMPLATE = """Analiza este código Python:
 

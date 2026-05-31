@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-detector.py — Analiza código Python y determina si es de nivel junior o senior.
+cli.py — Analiza código Python y determina si es de nivel junior o senior.
 
 Uso:
-    python detector.py mi_codigo.py
-    python detector.py https://github.com/usuario/repo/blob/main/archivo.py
-    python detector.py mi_codigo.py --modelo gpt-4o
-    python detector.py mi_codigo.py --modelo claude-sonnet-4-6
-    python detector.py mi_codigo.py --json
+    detector mi_codigo.py
+    detector https://github.com/usuario/repo/blob/main/archivo.py
+    detector mi_codigo.py --modelo gpt-4o
+    detector mi_codigo.py --modelo claude-sonnet-4-6
+    detector mi_codigo.py --json
 """
 
 import json
@@ -24,16 +24,16 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 from rich.text import Text
 
-from ast_analyzer import analyze as ast_analyze, metrics_to_summary
-from github_fetcher import fetch_github_source
-from llm_analyzer import (
+from .ast_analyzer import analyze as ast_analyze, metrics_to_summary
+from .github_fetcher import fetch_github_source
+from .llm_analyzer import (
     analyze as llm_analyze,
     default_model,
     is_openai_model,
     ENV_KEY_OPENAI,
     ENV_KEY_ANTHROPIC,
 )
-from pylint_runner import run_pylint, pylint_to_summary, pylint_counts
+from .pylint_runner import run_pylint, pylint_to_summary, pylint_counts
 
 load_dotenv()
 

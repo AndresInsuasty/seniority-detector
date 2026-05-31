@@ -72,22 +72,34 @@ ANTHROPIC_API_KEY=sk-ant-...
 
 ## Uso
 
+El repositorio incluye dos archivos de ejemplo para probar la herramienta de inmediato:
+
+```bash
+# Código con señales junior: variables genéricas, sin type hints, hardcoded paths
+uv run detector ejemplos/codigo_junior.py
+
+# Código con señales senior: dataclasses, type hints, logging, context managers
+uv run detector ejemplos/codigo_senior.py
+```
+
+Para cualquier archivo propio:
+
 ```bash
 # Archivo local
-uv run python detector.py mi_codigo.py
+uv run detector mi_codigo.py
 
 # Directo desde GitHub
-uv run python detector.py https://github.com/usuario/repo/blob/main/archivo.py
+uv run detector https://github.com/usuario/repo/blob/main/archivo.py
 
 # Ver métricas AST + Pylint completas
-uv run python detector.py mi_codigo.py --metricas
+uv run detector mi_codigo.py --metricas
 
 # Elegir modelo manualmente
-uv run python detector.py mi_codigo.py --modelo gpt-4o
-uv run python detector.py mi_codigo.py --modelo claude-sonnet-4-6
+uv run detector mi_codigo.py --modelo gpt-4o
+uv run detector mi_codigo.py --modelo claude-sonnet-4-6
 
 # Salida JSON (para pipelines o integraciones)
-uv run python detector.py mi_codigo.py --json
+uv run detector mi_codigo.py --json
 ```
 
 ## Modelos soportados
@@ -160,11 +172,18 @@ Con el flag `--json` obtienes un objeto estructurado, ideal para integraciones:
 
 ```
 seniority-detector/
-├── detector.py        # CLI principal (entry point)
-├── ast_analyzer.py    # Métricas estructurales vía módulo ast de Python
-├── pylint_runner.py   # Análisis estático determinístico con Pylint
-├── llm_analyzer.py    # Cliente unificado OpenAI / Anthropic
-├── github_fetcher.py  # Descarga código desde URLs de GitHub
+├── src/
+│   └── seniority_detector/
+│       ├── cli.py             # CLI principal (entry point)
+│       ├── ast_analyzer.py    # Métricas estructurales vía módulo ast de Python
+│       ├── pylint_runner.py   # Análisis estático determinístico con Pylint
+│       ├── llm_analyzer.py    # Cliente unificado OpenAI / Anthropic
+│       ├── github_fetcher.py  # Descarga código desde URLs de GitHub
+│       └── prompts/
+│           └── system_prompt.txt  # Instrucciones del sistema para el LLM
+├── tests/
+│   ├── test_ast_analyzer.py
+│   └── test_llm_analyzer.py
 ├── ejemplos/
 │   ├── codigo_junior.py
 │   └── codigo_senior.py
