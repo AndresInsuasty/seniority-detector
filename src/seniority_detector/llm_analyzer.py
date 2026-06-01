@@ -11,6 +11,11 @@ from .ast_analyzer import CodeMetrics, metrics_to_summary
 MAX_CODE_CHARS: int = 4_000
 ENV_KEY_OPENAI = "OPENAI_API_KEY"
 ENV_KEY_ANTHROPIC = "ANTHROPIC_API_KEY"
+ENV_DEFAULT_ANTHROPIC_MODEL = "DEFAULT_ANTHROPIC_MODEL"
+ENV_DEFAULT_OPENAI_MODEL = "DEFAULT_OPENAI_MODEL"
+
+_FALLBACK_ANTHROPIC_MODEL = "claude-sonnet-4-6"
+_FALLBACK_OPENAI_MODEL = "gpt-4o-mini"
 
 
 def _load_system_prompt() -> str:
@@ -51,13 +56,16 @@ def is_openai_model(model: str) -> bool:
 def default_model() -> str:
     """Return the best available model based on environment keys.
 
+    The model can be overridden with DEFAULT_ANTHROPIC_MODEL or DEFAULT_OPENAI_MODEL
+    environment variables. Anthropic is preferred when both keys are present.
+
     Raises:
         EnvironmentError: If neither ANTHROPIC_API_KEY nor OPENAI_API_KEY is set.
     """
     if os.environ.get(ENV_KEY_ANTHROPIC):
-        return "claude-sonnet-4-6"
+        return os.environ.get(ENV_DEFAULT_ANTHROPIC_MODEL, _FALLBACK_ANTHROPIC_MODEL)
     if os.environ.get(ENV_KEY_OPENAI):
-        return "gpt-5-mini"
+        return os.environ.get(ENV_DEFAULT_OPENAI_MODEL, _FALLBACK_OPENAI_MODEL)
     raise EnvironmentError(
         "No se encontró ninguna API key. "
         "Define OPENAI_API_KEY o ANTHROPIC_API_KEY en tu entorno o en un archivo .env."
